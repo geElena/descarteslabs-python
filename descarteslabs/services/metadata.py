@@ -58,9 +58,10 @@ class Metadata(Service):
         r = self.session.get('/sources')
         return r.json()
 
-    def bands(self, limit=None, products=None, offset=None, wavelength=None, resolution=None, tags=None):
-        """Seach for imagery data bands that you have access to.
+    def bands(self, products=None, limit=None, offset=None, wavelength=None, resolution=None, tags=None):
+        """Search for imagery data bands that you have access to.
 
+        :param list(str) products: A list of product(s) to return bands for.
         :param int limit: Number of results to return.
         :param int offset: Index to start at when returning results.
         :param float wavelenth: A wavelength in nm e.g 700 that the band sensor must measure.
@@ -79,6 +80,26 @@ class Metadata(Service):
         }
 
         r = self.session.post('/bands/search', json=kwargs)
+        return r.json()
+
+    def derived_bands(self, bands=None, limit=None, offset=None):
+        """Search for predefined derived bands that you have access to.
+
+        :param list(str) bands: A list of source bands that must be part of
+                                the derived band i.e ["nir"]
+        :param int limit: Number of results to return.
+        :param int offset: Index to start at when returning results.
+        """
+        params = ['bands', 'limit', 'offset']
+
+        args = locals()
+        kwargs = {
+            param: args[param]
+            for param in params
+            if args[param] is not None
+        }
+
+        r = self.session.post('/bands/derived/search', json=kwargs)
         return r.json()
 
     def products(self, bands=None, limit=None, offset=None):
@@ -137,6 +158,7 @@ class Metadata(Service):
               'start_date': '4/1/1999',
               'swath': '185km',
               'title': 'Landsat 7 Tier 2 Collection'}]
+
         """
         params = ['limit', 'offset', 'bands']
 
@@ -163,6 +185,17 @@ class Metadata(Service):
 
         """
         r = self.session.get('/products')
+
+        return r.json()
+
+    def translate(self, const_id):
+        """Translate a deprecated constellation identifier
+        into a new-style product identifier.
+
+        :param string const_id: The constellation identifier to translate.
+        """
+
+        r = self.session.get('/products/translate/{}'.format(const_id))
 
         return r.json()
 
@@ -549,70 +582,6 @@ class Metadata(Service):
 
         :param str product_id: Product Identifier.
 
-        Example::
-
-            >>> import descarteslabs as dl
-            >>> from pprint import pprint
-            >>> product = dl.metadata.get_product('landsat:LC08:PRE:TOAR')
-            >>> pprint(product)
-            {'Orbit': 'sun-synchronous',
-                'Spectral Bands': '7',
-                'description': 'Landsat 8 Operational Land Imager imagery, processed by '
-                                'Descartes Labs into Top-of-atmosphere-reflectance. Red, '
-                                'green, and blue bands are pansharpened to 15 meter resolution '
-                                'using the panchromatic band.\\n'
-                                ' \\n'
-                                'Landsat 8 is an American Earth observation satellite launched '
-                                'on February 11, 2013. It is the eighth satellite in the '
-                                'Landsat program; the seventh to reach orbit successfully. '
-                                'Originally called the Landsat Data Continuity Mission (LDCM), '
-                                'it is a collaboration between NASA and the United States '
-                                'Geological Survey(USGS). NASA Goddard Space Flight Center in '
-                                'Greenbelt, Maryland, provided development, mission systems '
-                                'engineering, and acquisition of the launch vehicle while the '
-                                'USGS provided for development of the ground systems and will '
-                                'conduct on-going mission operations.\\n'
-                                'The satellite was built by Orbital Sciences Corporation, who '
-                                'served as prime contractor for the mission.[3] The '
-                                "spacecraft's instruments were constructed by Ball Aerospace "
-                                "and NASA's Goddard Space Flight Center,[4] and its launch was "
-                                'contracted to United Launch Alliance.[5] During the first 108 '
-                                'days in orbit, LDCM underwent checkout and verification by '
-                                'NASA and on 30 May 2013 operations were transferred from NASA '
-                                'to the USGS when LDCM was officially renamed to Landsat '
-                                '8.[6]\\n'
-                                'This information uses material from the Wikipedia article <a '
-                                'href="https://en.wikipedia.org/wiki/Landsat_8">"Landsat_8"</a>, '
-                                'which is released under the <a '
-                                'href="https://creativecommons.org/licenses/by-sa/3.0/">Creative '
-                                'Commons Attribution-Share-Alike License 3.0</a>.\\n',
-                'end_date': 'present',
-                'id': 'landsat:LC08:PRE:TOAR',
-                'native_bands': ['coastal-aerosol',
-                                'red',
-                                'green',
-                                'blue',
-                                'nir',
-                                'swir1',
-                                'swir2',
-                                'tirs1',
-                                'cirrus',
-                                'qa_water',
-                                'qa_snow',
-                                'qa_cloud',
-                                'qa_cirrus'],
-                'notes': 'Red, green, and blue bands have been pansharpened to 15m resolution',
-                'orbit': 'sun-synchronous',
-                'processing_level': 'TOAR',
-                'product': 'landsat:LC08:PRE:TOAR',
-                'resolution': 15,
-                'revisit': 16,
-                'sensor': 'Operational Land Imager (OLI), Thermal Infrared Sensor (TIRS)',
-                'spectral bands': 7,
-                'start_date': '2/1/2013',
-                'swath': '185km',
-                'title': 'Landsat 8'}
-
         """
         r = self.session.get('/products/%s' % product_id)
         return r.json()
@@ -624,4 +593,13 @@ class Metadata(Service):
 
         """
         r = self.session.get('/bands/%s' % band_id)
+        return r.json()
+
+    def get_derived_band(self, derived_band_id):
+        """Get information about a single product.
+
+        :param str derived_band_id: Derived band identifier.
+
+        """
+        r = self.session.get('/bands/derived/%s' % derived_band_id)
         return r.json()
