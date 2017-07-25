@@ -110,55 +110,6 @@ class Metadata(Service):
         :param int limit: Number of results to return.
         :param int offset: Index to start at when returning results.
 
-        Example::
-            >>> import descarteslabs as dl
-            >>> from pprint import pprint
-            >>> products = dl.metadata.products(limit=1)
-            >>> pprint(products)
-            [{'Orbit': 'sun-synchronous',
-              'Spectral Bands': '7',
-              'description': 'Landsat 7 Tier 2 enhanced thematic mapper imagery, processed '
-                             'by Descartes Labs into Top-of-atmosphere-reflectance. Red, '
-                             'green, and blue bands are pansharpened to 15 meter '
-                             'resolution using the panchromatic band.\n'
-                             ' \n'
-                             'Landsat 7 is the seventh satellite of the Landsat program. '
-                             "Launched on April 15, 1999, Landsat 7's primary goal is to "
-                             'refresh the global archive of satellite photos, providing '
-                             'up-to-date and cloud-free images. The Landsat Program is '
-                             'managed and operated by the USGS, and data from Landsat 7 is '
-                             'collected and distributed by the USGS.\n'
-                             ' \n'
-                             'This information uses material from the Wikipedia article <a '
-                             'href="https://en.wikipedia.org/wiki/Landsat_7">"Landsat_7"</a>, '
-                             'which is released under the <a '
-                             'href="https://creativecommons.org/licenses/by-sa/3.0/">Creative '
-                             'Commons Attribution-Share-Alike License 3.0</a>.\n',
-              'end_date': 'present',
-              'native_bands': ['red',
-                               'green',
-                               'blue',
-                               'nir',
-                               'swir1',
-                               'swir2',
-                               'tirs1',
-                               'qa_snow',
-                               'qa_cloud_shadow',
-                               'qa_cloud',
-                               'qa_saturated'],
-              'notes': 'Red, green, and blue bands have been pansharpened to 15m '
-                       'resolution',
-              'orbit': 'sun-synchronous',
-              'processing_level': 'TOAR',
-              'product': 'landsat:LE07:01:T2:TOAR',
-              'resolution': 15,
-              'revisit': 16,
-              'sensor': 'Enhanced Thematic Mapper (ETM+)',
-              'spectral bands': 7,
-              'start_date': '4/1/1999',
-              'swath': '185km',
-              'title': 'Landsat 7 Tier 2 Collection'}]
-
         """
         params = ['limit', 'offset', 'bands']
 

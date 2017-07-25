@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import operator
 import os
 from .service import Service
-from six import string_types
 
 
 class Notification(Service):
@@ -28,14 +26,15 @@ class Notification(Service):
         of the backing service.
         """
         if url is None:
-            url = os.environ.get("DESCARTESLABS_NOTIFY_URL", "https://platform-services-dev.descarteslabs.com/notification/dev")
-            
+            url = os.environ.get("DESCARTESLABS_NOTIFY_URL",
+                                 "https://platform-services-dev.descarteslabs.com/notification/dev")
+
         Service.__init__(self, url, token)
 
     def identify(self):
         r = self.session.get('/identify/')
         return r.cookies['sessionid']
-        
+
     def notify(self, kwargs):
         r = self.session.post('/post/', json=kwargs)
         return r.json()

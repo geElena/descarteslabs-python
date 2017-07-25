@@ -54,7 +54,7 @@ metadata_parser.add_argument('-bbox', help='Whether or not to use a bounding box
 
 # Notification Group
 notification_parser = subparsers.add_parser('notification')
-notification_parser.add_argument('command', choices=['identify','notify'], help='The action to take')
+notification_parser.add_argument('command', choices=['identify', 'notify'], help='The action to take')
 notification_parser.add_argument('-url', help='The url of the service')
 notification_parser.add_argument('argument', nargs='?')
 
