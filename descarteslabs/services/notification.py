@@ -35,6 +35,41 @@ class Notification(Service):
         r = self.session.get('/identify/')
         return r.cookies['sessionid']
 
-    def notify(self, kwargs):
-        r = self.session.post('/post/', json=kwargs)
+    def upload(self, name, data):
+        r = self.session.post('/upload/%s/' % name, json=data)
+        return r.json()
+
+    def file(self, file_id=None, filename=None, extension=None):
+        params = {}
+        if file_id:
+            params['file_id'] = file_id
+        if filename:
+            params['filename'] = filename
+        if extension:
+            params['extension'] = extension
+        r = self.session.get('/file/', params=params)
+        return r.json()
+
+    def shape(self, shape_id=None, file_id=None):
+        params = {}
+        if shape_id:
+            params['shape_id'] = shape_id
+        if file_id:
+            params['file_id'] = file_id
+        r = self.session.get('/shape/', params=params)
+        return r.json()
+
+    def update(self, shape_id, message=None):
+        params = {}
+        if message:
+            params['message'] = message
+        r = self.session.get('/update/%s/' % shape_id, params=params)
+        return r.json()
+
+    def delete(self, shape_id):
+        r = self.session.get('/delete/%s/' % shape_id)
+        return r.json()
+
+    def search(self):
+        r = self.session.get('/search/')
         return r.json()

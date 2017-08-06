@@ -54,9 +54,14 @@ metadata_parser.add_argument('-bbox', help='Whether or not to use a bounding box
 
 # Notification Group
 notification_parser = subparsers.add_parser('notification')
-notification_parser.add_argument('command', choices=['identify', 'notify'], help='The action to take')
+notification_parser.add_argument('command', choices=['identify', 'upload', 'file', 'shape', 'update', 'delete'], help='The action to take')
 notification_parser.add_argument('-url', help='The url of the service')
 notification_parser.add_argument('argument', nargs='?')
+notification_parser.add_argument('-file_id', default=None, help='The file id')
+notification_parser.add_argument('-shape_id', default=None, help='The shape id')
+notification_parser.add_argument('-filename', default=None, help='The file name')
+notification_parser.add_argument('-extension', default=None, help='The file extension')
+notification_parser.add_argument('-message', default=None, help='The message')
 
 # Places Group
 places_parser = subparsers.add_parser('places')
