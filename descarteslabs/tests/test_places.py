@@ -67,7 +67,7 @@ class TestPlaces(unittest.TestCase):
 
     def test_metrics(self):
         r = self.instance.metrics()
-        self.assertEqual(4, r)
+        self.assertEqual(4, len(r))
 
     def test_value(self):
         r = self.instance.value('north-america_united-states', source='nass', category='corn', metric='yield')
