@@ -14,6 +14,7 @@
 
 # flake8: noqa
 
+__path__ = __import__('pkgutil').extend_path(__path__, __name__)
 __version__ = "0.4.6"
 from .auth import Auth
 descartes_auth = Auth.from_environment_or_token_json()
